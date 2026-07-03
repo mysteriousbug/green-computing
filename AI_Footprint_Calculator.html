@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI &amp; Digital Footprint Calculator — Green Computing Masterclass</title>
+<style>
+  :root{
+    --dark:#1B4332; --green:#2D6A4F; --green2:#40916C; --mint:#52B788;
+    --mintpale:#B7E4C7; --amber:#E8871E; --amberpale:#F4A261;
+    --card:#EEF6F1; --carda:#FBF1E5; --ink:#1B2D26; --mute:#5C6B63; --line:#D6E4DC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,Calibri,Arial,sans-serif;
+    background:linear-gradient(160deg,#14361f 0%,#1B4332 45%,#234d3a 100%);
+    color:var(--ink); min-height:100vh; padding:24px 16px 60px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;}
+  header{text-align:center;color:#fff;margin-bottom:26px;}
+  .eyebrow{font-size:13px;letter-spacing:2px;font-weight:700;color:var(--mintpale);text-transform:uppercase;}
+  h1{font-family:Cambria,Georgia,serif;font-size:34px;margin:8px 0 6px;line-height:1.15;}
+  header p{color:var(--mintpale);font-size:16px;font-style:italic;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media(max-width:840px){.grid{grid-template-columns:1fr;}}
+  .panel{background:#fff;border-radius:16px;padding:24px 24px 18px;box-shadow:0 10px 30px rgba(0,0,0,.18);}
+  .panel h2{font-family:Cambria,Georgia,serif;font-size:20px;color:var(--dark);margin-bottom:4px;}
+  .panel .sub{font-size:13px;color:var(--mute);margin-bottom:16px;}
+  .activity{margin-bottom:18px;}
+  .actlabel{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
+  .actlabel .name{font-weight:600;font-size:14.5px;color:var(--ink);}
+  .actlabel .name .ico{display:inline-block;width:24px;text-align:center;margin-right:6px;}
+  .actlabel .val{font-weight:700;font-size:14px;color:var(--green);background:var(--card);padding:2px 10px;border-radius:20px;min-width:64px;text-align:center;}
+  input[type=range]{-webkit-appearance:none;width:100%;height:7px;border-radius:6px;background:var(--line);outline:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--green2);cursor:pointer;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);}
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--green2);cursor:pointer;border:3px solid #fff;}
+  input[type=range].hot::-webkit-slider-thumb{background:var(--amber);}
+  input[type=range].hot::-moz-range-thumb{background:var(--amber);}
+  .hint{font-size:11.5px;color:var(--mute);margin-top:3px;}
+  .presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+  .presets button{flex:1;min-width:120px;border:1.5px solid var(--line);background:#fff;color:var(--green);font-weight:600;
+    font-size:13px;padding:9px 8px;border-radius:10px;cursor:pointer;transition:.15s;}
+  .presets button:hover{border-color:var(--green2);background:var(--card);}
+  .presets button.active{background:var(--green);color:#fff;border-color:var(--green);}
+
+  /* results */
+  .totals{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:18px;}
+  .stat{border-radius:14px;padding:16px 12px;text-align:center;}
+  .stat.energy{background:var(--card);}
+  .stat.water{background:#E6F0F4;}
+  .stat.carbon{background:var(--carda);}
+  .stat .num{font-family:Cambria,Georgia,serif;font-size:30px;font-weight:700;line-height:1;}
+  .stat.energy .num{color:var(--green);}
+  .stat.water .num{color:#1C6E8C;}
+  .stat.carbon .num{color:var(--amber);}
+  .stat .unit{font-size:12px;color:var(--mute);margin-top:4px;font-weight:600;}
+  .stat .label{font-size:11px;color:var(--mute);margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
+
+  .compare-title{font-weight:700;font-size:14px;color:var(--ink);margin:6px 0 10px;}
+  .cmp{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--card);border-radius:11px;margin-bottom:9px;}
+  .cmp .emoji{font-size:24px;line-height:1;}
+  .cmp .txt{font-size:13.5px;color:var(--ink);}
+  .cmp .txt b{color:var(--green);}
+  .scaleNote{margin-top:14px;padding:14px;border-radius:12px;background:var(--dark);color:#fff;font-size:13.5px;line-height:1.5;}
+  .scaleNote b{color:var(--amberpale);}
+  .yearbig{font-family:Cambria,Georgia,serif;font-weight:700;color:var(--mintpale);}
+  footer{text-align:center;color:var(--mintpale);font-size:12px;margin-top:26px;line-height:1.6;}
+  .pill{display:inline-block;background:var(--green2);color:#fff;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:600;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Crust EcoNetwork · Green Computing Masterclass</div>
+    <h1>The AI &amp; Digital Footprint Calculator</h1>
+    <p>Move the sliders to match a day in your life — and watch the cost add up.</p>
+  </header>
+
+  <div class="grid">
+    <!-- INPUT PANEL -->
+    <div class="panel">
+      <h2>A day of digital life</h2>
+      <div class="sub">How much do you do on a typical day?</div>
+
+      <div class="presets" id="presets">
+        <button data-preset="light">Light user</button>
+        <button data-preset="typical">Typical student</button>
+        <button data-preset="heavy">AI power user</button>
+      </div>
+
+      <div class="activity">
+        <div class="actlabel"><span class="name"><span class="ico">💬</span>AI chatbot questions</span><span class="val" id="v_ai">15</span></div>
+        <input type="range" id="ai" min="0" max="200" value="15">
+        <div class="hint">A typed question to an AI assistant (~2.9 Wh each)</div>
+      </div>
+
+      <div class="activity">
+        <div class="actlabel"><span class="name"><span class="ico">🎨</span>AI images generated</span><span class="val" id="v_img">2</span></div>
+        <input type="range" id="img" min="0" max="100" value="2" class="hot">
+        <div class="hint">Generating one picture costs far more than a text answer</div>
+      </div>
+
+      <div class="activity">
+        <div class="actlabel"><span class="name"><span class="ico">🔍</span>Web searches</span><span class="val" id="v_search">40</span></div>
+        <input type="range" id="search" min="0" max="300" value="40">
+        <div class="hint">A normal search engine query (~0.3 Wh each)</div>
+      </div>
+
+      <div class="activity">
+        <div class="actlabel"><span class="name"><span class="ico">📺</span>Video streaming (hours)</span><span class="val" id="v_video">2</span></div>
+        <input type="range" id="video" min="0" max="12" value="2" step="0.5">
+        <div class="hint">Streaming HD video — heavy on data and energy</div>
+      </div>
+
+      <div class="activity">
+        <div class="actlabel"><span class="name"><span class="ico">✉️</span>Emails sent</span><span class="val" id="v_email">20</span></div>
+        <input type="range" id="email" min="0" max="150" value="20">
+        <div class="hint">A simple email (~0.3 Wh); with big attachments, more</div>
+      </div>
+    </div>
+
+    <!-- RESULTS PANEL -->
+    <div class="panel">
+      <h2>Your daily footprint</h2>
+      <div class="sub">Estimated impact of one day, then scaled to a year.</div>
+
+      <div class="totals">
+        <div class="stat energy"><div class="num" id="t_energy">0</div><div class="unit" id="u_energy">Wh</div><div class="label">Energy</div></div>
+        <div class="stat water"><div class="num" id="t_water">0</div><div class="unit">litres</div><div class="label">Water</div></div>
+        <div class="stat carbon"><div class="num" id="t_carbon">0</div><div class="unit" id="u_carbon">grams</div><div class="label">CO₂</div></div>
+      </div>
+
+      <div class="compare-title">What that looks like in real life</div>
+      <div class="cmp"><div class="emoji">🔋</div><div class="txt">Same energy as charging your phone <b id="c_phone">0</b> times</div></div>
+      <div class="cmp"><div class="emoji">💡</div><div class="txt">Or running a 10W LED bulb for <b id="c_bulb">0</b></div></div>
+      <div class="cmp"><div class="emoji">🚰</div><div class="txt">Water equal to <b id="c_bottle">0</b> half-litre bottles</div></div>
+      <div class="cmp"><div class="emoji">🚗</div><div class="txt">Carbon of driving a car about <b id="c_car">0</b></div></div>
+
+      <div class="scaleNote">
+        Over a whole year, that's roughly <span class="yearbig" id="y_energy">0</span> of electricity,
+        <span class="yearbig" id="y_water">0</span> of water, and <span class="yearbig" id="y_carbon">0</span> of CO₂.
+        <br><br><b>Now imagine a million people doing the same.</b> Small daily choices become national-scale demand.
+      </div>
+      <span class="pill">Estimates for teaching — real values vary by model, device &amp; grid</span>
+    </div>
+  </div>
+
+  <footer>
+    Built for the Crust EcoNetwork Green Computing Masterclass · 2026<br>
+    Figures based on IEA, UNU &amp; published research. Per-use values are illustrative averages for discussion, not exact measurements.
+  </footer>
+</div>
+
+<script>
+// --- per-use factors (averages for teaching) ---
+// energy in Wh, water in litres, carbon in grams CO2 per unit
+const F = {
+  ai:     { e: 2.9,  w: 0.04,  c: 1.6 },   // one AI text answer
+  img:    { e: 30,   w: 0.40,  c: 16  },   // one AI image (much heavier)
+  search: { e: 0.3,  w: 0.004, c: 0.18},   // one web search
+  video:  { e: 75,   w: 0.50,  c: 40  },   // one hour HD streaming
+  email:  { e: 0.3,  w: 0.004, c: 0.3 },   // one email
+};
+const ids = ['ai','img','search','video','email'];
+
+const presets = {
+  light:   { ai:3,  img:0,  search:15,  video:0.5, email:5  },
+  typical: { ai:15, img:2,  search:40,  video:2,   email:20 },
+  heavy:   { ai:120,img:25, search:80,  video:4,   email:60 },
+};
+
+function fmt(n){
+  if(n>=1000000) return (n/1000000).toFixed(1).replace(/\.0$/,'')+'M';
+  if(n>=1000)    return (n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,'')+'k';
+  if(n>=100)     return Math.round(n).toString();
+  if(n>=10)      return n.toFixed(0);
+  return n.toFixed(1);
+}
+function fmtTime(hours){
+  if(hours>=24) return (hours/24).toFixed(1).replace(/\.0$/,'')+' days';
+  if(hours>=1)  return hours.toFixed(1).replace(/\.0$/,'')+' hours';
+  return Math.round(hours*60)+' minutes';
+}
+function fmtBig(val,unit){ // val in base unit
+  return fmt(val)+' '+unit;
+}
+
+function compute(){
+  let e=0,w=0,c=0;
+  ids.forEach(id=>{
+    const v=parseFloat(document.getElementById(id).value)||0;
+    document.getElementById('v_'+id).textContent = (id==='video'? v : Math.round(v));
+    e += v*F[id].e; w += v*F[id].w; c += v*F[id].c;
+  });
+
+  // daily display
+  const energyEl=document.getElementById('t_energy'), uEnergy=document.getElementById('u_energy');
+  if(e>=1000){ energyEl.textContent=(e/1000).toFixed(2); uEnergy.textContent='kWh'; }
+  else { energyEl.textContent=Math.round(e); uEnergy.textContent='Wh'; }
+
+  document.getElementById('t_water').textContent = w<10 ? w.toFixed(1) : Math.round(w);
+
+  const carbonEl=document.getElementById('t_carbon'), uCarbon=document.getElementById('u_carbon');
+  if(c>=1000){ carbonEl.textContent=(c/1000).toFixed(2); uCarbon.textContent='kg'; }
+  else { carbonEl.textContent=Math.round(c); uCarbon.textContent='grams'; }
+
+  // comparisons
+  document.getElementById('c_phone').textContent  = fmt(e/12);          // phone ~12 Wh full charge
+  document.getElementById('c_bulb').textContent   = fmtTime(e/10);      // 10W bulb hours
+  document.getElementById('c_bottle').textContent = fmt(w/0.5);         // 0.5 L bottles
+  document.getElementById('c_car').textContent    = fmtKm(c/120);       // ~120 g CO2 per km
+
+  // yearly
+  document.getElementById('y_energy').textContent = (e*365>=1000)?fmtBig(e*365/1000,'kWh'):fmtBig(e*365,'Wh');
+  document.getElementById('y_water').textContent  = fmtBig(w*365,'litres');
+  document.getElementById('y_carbon').textContent = (c*365>=1000)?fmtBig(c*365/1000,'kg'):fmtBig(c*365,'g');
+}
+function fmtKm(km){
+  if(km>=1) return fmt(km)+' km';
+  return Math.round(km*1000)+' m';
+}
+
+ids.forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearActive();compute();}));
+
+function clearActive(){document.querySelectorAll('#presets button').forEach(b=>b.classList.remove('active'));}
+document.querySelectorAll('#presets button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const p=presets[btn.dataset.preset];
+    ids.forEach(id=>document.getElementById(id).value=p[id]);
+    clearActive(); btn.classList.add('active'); compute();
+  });
+});
+
+// init
+document.querySelector('[data-preset="typical"]').classList.add('active');
+compute();
+</script>
+</body>
+</html>
