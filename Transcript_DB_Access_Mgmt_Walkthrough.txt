@@ -1,0 +1,44 @@
+Database Access Management Audit — Control Walkthrough
+Microsoft Teams Meeting Transcript (Copilot enabled)
+Reference: DBAM-FY26
+Date: 4 March 2026    Time: 10:00–11:05 SGT (65 min)
+
+Attendees:
+  - Ananya Aithal — Group Internal Audit — ICS (Auditor)
+  - Edwin Joyson — Group Internal Audit — Audit Lead
+  - Raj Kumar — Group Internal Audit — Auditor
+  - Haidi Chen — Group Internal Audit — Data Analytics
+  - Rajesh Menon — Technology & Operations — DBA Team Lead
+  - Priya Sharma — Cyber Security — Database Security
+  - Suresh Nair — Identity & Access Management — PAM Lead
+
+---
+[00:00:12] Edwin Joyson: Thanks all. Today's walkthrough covers privileged access management for the database estate. Rajesh, can you start with how privileged access is granted and vaulted?
+
+[00:00:45] Rajesh Menon: Sure. Any privileged database access goes through a ServiceNow request with a multi-step approval — line manager, DBA team lead, then control owner. Once approved, the credential is vaulted in CyberArk and sessions are recorded.
+
+[00:01:30] Suresh Nair: On the IAM side, CyberArk onboarding covers Oracle, MSSQL, DB2, PostgreSQL and the AWS and Azure managed databases. MongoDB is the exception — those privileged accounts are provisioned through a separate process that isn't integrated with CyberArk's discovery scan yet.
+
+[00:02:20] Ananya Aithal: So the monthly reconciliation that identifies unvaulted accounts — does it see MongoDB?
+
+[00:02:28] Rajesh Menon: Honestly, no. The reconciliation is based on CyberArk's discovery scan, which doesn't cover MongoDB. So MongoDB privileged accounts wouldn't show up as unvaulted in our reporting.
+
+[00:03:05] Ananya Aithal: Understood. What about recertification — how often is privileged access recertified?
+
+[00:03:14] Suresh Nair: Application service accounts are recertified quarterly. For DBA personal accounts, I'll be candid — there isn't a consistent periodic recertification in place right now. It's something we know we need to formalise.
+
+[00:03:55] Raj Kumar: And revocation on leavers or contract-end?
+
+[00:04:02] Rajesh Menon: It's manual — the manager raises the revocation request. There's no automated HR-trigger, so timeliness depends on the manager.
+
+[00:04:40] Priya Sharma: On monitoring — Imperva SecureSphere DAM runs light agents on the database hosts feeding the DAM gateways. Data Risk Analytics baselines normal access and alerts on deviations. Native database audit logs are retained separately for forensics.
+
+[00:05:20] Ananya Aithal: Is the approval workflow enforcing segregation of duties — could a DBA team lead approve access to a database they themselves have access to?
+
+[00:05:32] Rajesh Menon: The workflow doesn't have a same-team SoD check, so in principle yes. We rely on session monitoring after the fact.
+
+[00:06:10] Edwin Joyson: Good walkthrough. Let's capture the RFIs: CyberArk vault inventory and reconciliation reports, the DAM policy and agent-coverage report, recertification records for DBA accounts, the Security Access Matrix, and the PAM onboarding standard with SAT/OAT evidence.
+
+[00:06:45] Ananya Aithal: Thanks everyone — we'll follow up the formal RFIs through Jira.
+
+[END OF TRANSCRIPT]
